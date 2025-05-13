@@ -1,0 +1,19 @@
+# Ignore data file and notebook output
+*.csv
+*.h5
+*.hdf5
+*.sql
+.ipynb_checkpoints/
+
+# Ignore Python folder
+__pycache__/
+*.pyc
+
+# Temporary files
+*.log
+*.tmp
+
+# Virtual environment
+env/
+venv/
+pyalgo.cfg
