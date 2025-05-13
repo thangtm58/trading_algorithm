@@ -3,10 +3,12 @@ import time
 from vnstock import Vnstock
 from datetime import timedelta
 import pandas as pd
+import threading
 
-TOKEN = '8092343811:AAFMv0H6H6W0B1q2vwvoI5BNmCdMyC3rrHkK'
+BOT_TOKEN = '8092343811:AAFMv0H66W0B1qzvwwoI5BNmCdMyC3rrHHk'
 CHAT_ID = '817649025'
-BOT_TOKEN = TOKEN
+
+stock = Vnstock().stock(symbol="VCB", source='VCI')
 
 def send_telegram_message(message, token, chat_id):
     url = f"https://api.telegram.org/bot{token}/sendMessage"
@@ -49,7 +51,7 @@ def run_bot(symbol):
             last_sell_vol = last_sell['volume']
 
             send_telegram_message(
-                f"Time: {last_time}:\n{symbol} Buy: {last_buy_price}, Vol: {last_buy_vol}\nSell: {last_sell_price}, Vol: {last_sell_vol}",
+                f"Time: {last_time}:\n{symbol}\nBuy: {last_buy_price}, Vol: {last_buy_vol}\nSell: {last_sell_price}, Vol: {last_sell_vol}",
                 BOT_TOKEN,
                 CHAT_ID
             )
@@ -60,6 +62,12 @@ def run_bot(symbol):
 
         # Always sleep 600 seconds after each run (success or error), then retry
         time.sleep(600)
+
 if __name__ == "__main__":
-    run_bot("VCB")
-    run_bot("BID")
+    symbols = ["VCB", "BID"]
+    for sym in symbols:
+        threading.Thread(target=run_bot, args=(sym,), daemon=True).start()
+
+    # Keep main thread alive forever
+    while True:
+        time.sleep(3600)
