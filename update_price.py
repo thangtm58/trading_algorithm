@@ -4,10 +4,6 @@ from vnstock import Vnstock
 from datetime import timedelta
 import pandas as pd
 
-# Set symbol
-symbol = 'VCB'
-stock = Vnstock().stock(symbol=symbol, source='VCI')
-
 TOKEN = '8092343811:AAFMv0H6H6W0B1q2vwvoI5BNmCdMyC3rrHkK'
 CHAT_ID = '817649025'
 BOT_TOKEN = TOKEN
@@ -21,16 +17,17 @@ def send_telegram_message(message, token, chat_id):
     response = requests.post(url, data=payload)
     return response
 
-def run_bot():
+def run_bot(symbol):
     while True:
         try:
+            stock = Vnstock().stock(symbol=symbol, source='VCI')
             # Try to fetch intraday data
             stk = stock.quote.intraday(symbol=symbol, to_df=True)
 
             # If data is too old -> raise error -> will be caught below
             stk['time'] = pd.to_datetime(stk['time'])  # ensure datetime format
             last_time = stk['time'].iloc[-1]
-            now = pd.Timestamp.now()
+            now = pd.Timestamp.now(tz='Asia/Ho_Chi_Minh')
 
             if (now - last_time) > timedelta(minutes=10):
                 raise ValueError("Data is too old (>10 minutes).")
@@ -46,10 +43,10 @@ def run_bot():
             if last_buy.empty or last_sell.empty:
                 raise ValueError("No Buy/Sell data available right now.")
 
-            last_buy_price = float(last_buy['price'].iloc[0])
-            last_sell_price = float(last_sell['price'].iloc[0])
-            last_buy_vol = float(last_buy['volume'].iloc[0])
-            last_sell_vol = float(last_sell['volume'].iloc[0])
+            last_buy_price = last_buy['price']
+            last_sell_price = last_sell['price']
+            last_buy_vol = last_buy['volume']
+            last_sell_vol = last_sell['volume']
 
             send_telegram_message(
                 f"Time: {last_time}:\n{symbol} Buy: {last_buy_price}, Vol: {last_buy_vol}\nSell: {last_sell_price}, Vol: {last_sell_vol}",
@@ -64,4 +61,5 @@ def run_bot():
         # Always sleep 600 seconds after each run (success or error), then retry
         time.sleep(600)
 if __name__ == "__main__":
-    run_bot()
+    run_bot("VCB")
+    run_bot("BID")
