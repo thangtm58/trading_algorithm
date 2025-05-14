@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Historical Price</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>This is the Historical Price Page</h1>
+
+    <div id="price-chart" style="width:100%; height:500px;"></div>
+    <script>
+        const plotData = JSON.parse('{{ historical_graph|safe }}');
+        Plotly.newPlot('price-chart', plotData.data, plotData.layout, {responsive: true});
+    </script>
+</body>
+</html>
