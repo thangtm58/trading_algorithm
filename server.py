@@ -9,7 +9,7 @@ from vnstock import Listing
 app = Flask(__name__)
 
 # Get all stock symbols
-valid_symbols = Listing().stock()['ticker'].tolist()
+valid_symbols = Listing().all_symbols()['symbol'].tolist()
 
 @app.route('/')
 @app.route('/index')
@@ -32,6 +32,7 @@ def info():
     return render_template(
         'info.html',
         symbol=symbol,
+        company_name=stock_info.company_name,
         forecast=stock_info.forecast_garch()
     )
 
