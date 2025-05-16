@@ -1,8 +1,9 @@
 from vnstock import Vnstock
 from datetime import datetime
 import plotly.graph_objects as go
-import plotly
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 def get_historical_price(symbol="VCB"):
     stock = Vnstock().stock(symbol=symbol, source='VCI')
@@ -18,14 +19,13 @@ def plot_historical_price(symbol="VCB"):
 
     df['date'] = pd.to_datetime(df['time'])  # Giữ nguyên datetime64[ns]
     df.sort_values(by='date', inplace=True)
-
+    """
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=df['date'], y=df['close'],
         mode='lines'
         # , name='Close'
     ))
-
     fig.update_layout(
         title=f"{symbol} Historical Price",
         xaxis_title="Date",
@@ -37,6 +37,16 @@ def plot_historical_price(symbol="VCB"):
     # Ensure datetime is serialized properly
     graphJSON = plotly.io.to_json(fig)
     return graphJSON
+    """
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(df['date'], df['close'], label='Close')
+    ax.set_title(f"{symbol} Historical Price")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Close")
+    ax.legend()
+    fig.tight_layout()
+    return fig
 
 
 if __name__ == '__main__':
