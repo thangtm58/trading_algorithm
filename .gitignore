@@ -4,6 +4,8 @@
 *.hdf5
 *.sql
 .ipynb_checkpoints/
+data/
+*.pkl
 
 # Ignore Python folder
 __pycache__/
