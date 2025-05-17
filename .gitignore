@@ -5,7 +5,12 @@
 *.sql
 .ipynb_checkpoints/
 data/
+
+# Model files
 *.pkl
+
+# Cache files
+app/cache/
 
 # Ignore Python folder
 __pycache__/

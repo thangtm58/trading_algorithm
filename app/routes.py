@@ -36,5 +36,6 @@ def info():
         'info.html',
         symbol=symbol,
         company_name=stock_info.company_name,
-        forecast=garch_forecast
+        forecast=garch_forecast,
+        historicalprice_plot=stock_info.plot_historical_price()
     )

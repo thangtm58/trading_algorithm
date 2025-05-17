@@ -18,6 +18,11 @@
             </div>
         </form>
 
+        <section class="mt-5">
+            <h3>Historical Price</h3>
+            {{ historicalprice_plot | safe }}
+        </section>
+
         {% if forecast %}
         <section class="mt-5">
             <h3>Forecast</h3>
@@ -42,6 +47,7 @@
                     </table>
             </div>
         </section>
+
         {% else %}
         <p class="text-center text-muted mt-5">No forecast available.</p>
         {% endif %}

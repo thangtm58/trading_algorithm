@@ -1,11 +1,12 @@
 from dotenv import load_dotenv
 from pprint import pprint
-import requests
-import os
 from vnstock import Vnstock, Listing
 from datetime import datetime
 from arch import arch_model
 import numpy as np
+import plotly.graph_objs as go
+import plotly.io as pio
+import pandas as pd
 
 load_dotenv()
 
@@ -22,6 +23,29 @@ class StockInfo:
             end=datetime.today().strftime("%Y-%m-%d"), 
             to_df=True
         )
+        self.historical_price['date'] = pd.to_datetime(self.historical_price['time'])
+        self.historical_price = self.historical_price.sort_values(by='date', ascending=True)
+
+    def plot_historical_price(self):
+
+        trace = go.Scatter(
+            x=self.historical_price['date'],
+            y=self.historical_price['close'],
+            mode='lines',
+            name=self.symbol
+        )
+
+        layout = go.Layout(
+            title=f"Price Chart for {self.symbol}",
+            xaxis=dict(title='Date'),
+            yaxis=dict(title='Close Price (VND)'),
+            template='plotly_white'
+        )
+
+        fig = go.Figure(data=[trace], layout=layout)
+        
+        # Return HTML div string
+        return pio.to_html(fig, full_html=False, include_plotlyjs='cdn')
 
     def forecast_garch(self, steps=20):
         # Calculate log returns from price and rescale by 100
