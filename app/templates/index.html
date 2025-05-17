@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Market Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Market Information</h1>
+
+        <form action="/info" method="get" class="mx-auto" style="max-width: 400px;">
+            <div class="mb-3">
+                <input type="text" class="form-control" name="symbol" placeholder="Enter stock symbol (e.g. FPT, VCB)">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Get Information</button>
+        </form>
+
+        {% if error_message %}
+        <div class="alert alert-danger mt-4 text-center">
+            {{ error_message }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
